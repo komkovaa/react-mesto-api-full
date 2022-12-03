@@ -1,0 +1,5 @@
+.popup__desc-error_active {
+    color: #FF0000;
+    display: block;
+    visibility: visible;
+}

@@ -1,0 +1,22 @@
+.profile__place-add-button {
+    width: 150px;
+    height: 50px;
+    border: 2px solid #fff;
+    border-radius: 2px;
+    background-color: #000;
+    color: #fff;
+    background-image: url(../../../images/Plus.svg);
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.profile__place-add-button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+@media screen and (max-width: 768px) {
+    .profile__place-add-button {
+        width: 282px;
+    }
+}

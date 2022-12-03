@@ -1,0 +1,13 @@
+.element__chosen {
+    background-image: url(../../../images/Chosen.svg);
+    background-color: transparent;
+    background-size: cover;
+    width: 22px;
+    height: 19px;
+    border: none;
+}
+
+.element__chosen:hover {
+    opacity: .5;
+    cursor: pointer;
+}

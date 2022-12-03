@@ -1,0 +1,10 @@
+.popup__desc-error {
+    font-weight: 400;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    padding-top: 5px;
+    display: block;
+    min-height: 30px;
+    visibility: hidden;
+}

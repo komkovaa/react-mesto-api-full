@@ -1,0 +1,10 @@
+.popup__container_type_photo {
+    padding: 0;
+    box-sizing: border-box;
+    color:#FFF;
+    background-color: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    max-width: 816px;
+}
+
