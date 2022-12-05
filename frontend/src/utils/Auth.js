@@ -1,5 +1,5 @@
 // export const BASE_URL = 'https://auth.nomoreparties.co';
-export const BASE_URL = 'http://localhost:3001';
+export const BASE_URL = 'https://komkova.students.nomoredomains.club';
 
 const request = ({
     url,
