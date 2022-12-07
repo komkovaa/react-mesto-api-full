@@ -15,7 +15,6 @@ import InfoTooltip from "./InfoTooltip";
 import Login from "./Login";
 import Register from "./Register";
 import ProtectedRoute from "./ProtectedRoute";
-import * as auth from '../utils/Auth.js';
 import Fail from "../images/Fail.svg";
 import Success from "../images/Success.svg";
 
@@ -36,28 +35,33 @@ function App() {
 
   //стейт для авторизации
   const [loggedIn, setLoggedIn] = useState(false);
-  const [profileEmail, setProfileEmail] = useState('');
   const [message, setMessage] = useState('');
   const [image, setImage] = useState('');
   const [alt, setAlt] = useState('');
 
   const history = useHistory();
 
-  useEffect(() => {
-    tokenCheck();
-  }, []);
+  
+  const tokenCheck = () => {
+    const token = localStorage.getItem('jwt');
 
-  //эффект при монтировании
-  useEffect(() => {
-    if (loggedIn) {
-      Promise.all([api.getUserInfo(), api.getInitialCards()])
+    if (!token) return handleLogout();
+    api.setToken(token)
+    return Promise.all([api.getUserInfo(), api.getInitialCards()])
         .then(([dataUser, dataCards]) => {
           setCurrentUser(dataUser);
           setCards(dataCards);
           setIsLoading(false);
         })
-        .catch((err) => console.log(err))
-    }
+        .catch((err) => {
+          console.log(err);
+          handleLogout()
+        })
+  };
+
+  //эффект при монтировании
+  useEffect(() => {
+    tokenCheck()
   }, [loggedIn]);
 
   //При клике на лайк
@@ -69,7 +73,7 @@ function App() {
     api
       .changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+        setCards((cards) => cards.map((c) => c._id === card._id ? newCard : c));
       })
       .catch((err) => console.log(err))
   }
@@ -166,13 +170,12 @@ function App() {
 
 
   function handleLogin(email, password) {
-    return auth.authorize(email, password)
+    return api.authorize(email, password)
       .then((data) => {
         if (!data.token) throw new Error('Missing jwt');  //проверяем, есть ли свойство token в объекте data, который вернул сервер
         //сохраняем токен в локальном хранилище
         localStorage.setItem('jwt', data.token);
         setLoggedIn(true);
-        setProfileEmail(email);
         history.push('/');
       })
       .catch(err => {
@@ -185,7 +188,7 @@ function App() {
   };
 
   function handleRegister(email, password) {
-    return auth.register(email, password)
+    return api.register(email, password)
       .then(() => {
         setMessage({ message: 'Вы успешно зарегистрировались!' });
         setImage({ image: Success });
@@ -201,19 +204,6 @@ function App() {
       .finally(() => {setIsInfoTooltipOpen(true)})
   }
 
-  function tokenCheck() {
-    const jwt = localStorage.getItem('jwt');
-
-    if (!jwt) return;
-
-    auth.checkToken(jwt).then((data) => {
-      setLoggedIn(true);
-      setIsLoading(false);
-      setProfileEmail(data.data.email);
-      history.push("/");
-    })
-    .catch((err) => {console.log(err)});
-  };
 
   function handleLogout() {
     localStorage.removeItem('jwt');
@@ -230,7 +220,7 @@ function App() {
       <div className="page">
         <Header
           loggedIn={loggedIn}
-          email={profileEmail}
+          email={currentUser.email}
           onLogout={handleLogout}
         />
         <Switch>

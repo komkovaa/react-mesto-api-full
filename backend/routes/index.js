@@ -1,4 +1,4 @@
-const router = require('express').Router();
+const { Router } = require('express');
 const { celebrate, Joi } = require('celebrate');
 
 const userRouter = require('./users');
@@ -9,7 +9,9 @@ const { urlLink } = require('../models/user');
 const { auth } = require('../middlewares/auth');
 const NotFoundError = require('../errors/not-found-error');
 
-router.post('/signup', celebrate({
+const authRouter = new Router();
+const router = new Router();
+authRouter.post('/signup', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
@@ -19,13 +21,14 @@ router.post('/signup', celebrate({
   }),
 }), createUser);
 
-router.post('/signin', celebrate({
+authRouter.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
 }), login);
 
+router.use('/', authRouter);
 router.use(auth);
 
 router.use('/users', userRouter);

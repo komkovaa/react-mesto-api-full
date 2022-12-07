@@ -31,6 +31,7 @@ app.use(errorLogger);
 
 app.use(errors());
 app.use((err, req, res, next) => {
+  console.error(err);
   const statusCode = err.statusCode || http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR;
   const message = statusCode === http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR ? 'На сервере произошла ошибка' : err.message;
   res.status(statusCode).send({ message });

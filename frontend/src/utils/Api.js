@@ -14,8 +14,13 @@ class Api {
     }
 
     _request(url, options) {
+        console.log(options);
         return fetch(url, options).then(this._handleResponse)
-      }
+    }
+
+    setToken(token) {
+        this._headers.Authorization = `Bearer ${token}`
+    }
 
     //Загрузка информации о пользователе
     getUserInfo() {
@@ -80,6 +85,21 @@ class Api {
             })
         })
     }
+
+    register = (email, password) => {
+        return this._request(`${this._baseUrl}/signup`, {
+            headers: this._headers,
+            data: { email, password }
+        });
+    };
+
+    //функция проверяет логин и пароль пользователя на сообветствие какому-либо профилю, хранящемуся в базе данных.
+    authorize = (email, password) => {
+        return this._request(`${this._baseUrl}/signin`, {
+            headers: this._headers,
+            data: { email, password },
+        });
+    };
 }
 
 
