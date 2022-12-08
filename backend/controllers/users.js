@@ -5,7 +5,6 @@ const { User } = require('../models/user');
 const BadRequestError = require('../errors/bad-request-error');
 const NotFoundError = require('../errors/not-found-error');
 const ServerError = require('../errors/server-error');
-const UnauthorizedError = require('../errors/anauthorized-error');
 const ConflictError = require('../errors/conflict-error');
 
 module.exports.getUsers = (req, res, next) => {
@@ -58,8 +57,8 @@ module.exports.login = (req, res, next) => {
       );
       res.send({ token });
     })
-    .catch(() => {
-      next(new UnauthorizedError('Неправильные почта или пароль'));
+    .catch((err) => {
+      next(err);
     });
 };
 

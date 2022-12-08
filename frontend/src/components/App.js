@@ -48,9 +48,9 @@ function App() {
     if (!token) return handleLogout();
     api.setToken(token)
     return Promise.all([api.getUserInfo(), api.getInitialCards()])
-        .then(([dataUser, dataCards]) => {
-          setCurrentUser(dataUser);
-          setCards(dataCards);
+        .then(([user, cards]) => {
+          setCurrentUser(user.data);
+          setCards(cards.data);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -67,13 +67,13 @@ function App() {
   //При клике на лайк
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const isLiked = card.likes.some(i => i === currentUser._id);
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api
       .changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
-        setCards((cards) => cards.map((c) => c._id === card._id ? newCard : c));
+        setCards((cards) => cards.map((c) => c._id === card._id ? newCard.data : c));
       })
       .catch((err) => console.log(err))
   }
@@ -134,22 +134,22 @@ function App() {
   
   function handleCardClick(res) { setSelectedCard(res) }
 
-  function handleUpdateUser(data) {
+  function handleUpdateUser(user) {
     setIsLoading(true);
-    api.editingUserInfo(data)
-      .then((data) => {
-        setCurrentUser(data);
+    api.editingUserInfo(user)
+      .then((user) => {
+        setCurrentUser(user.data);
         setIsLoading(false);
         closeAllPopups();
       })
       .catch((err) => console.log(err))
   }
 
-  function handleUpdateAvatar(data) {
+  function handleUpdateAvatar(user) {
     setIsLoading(true);
-    api.changeAvatar(data)
-      .then((data) => {
-        setCurrentUser(data);
+    api.changeAvatar(user)
+      .then((user) => {
+        setCurrentUser(user.data);
         setIsLoading(false);
         closeAllPopups();
       })
@@ -160,7 +160,7 @@ function App() {
     setIsLoading(true);
     api.createNewCard(newCard)
       .then((newCard) => {
-        setCards([newCard, ...cards]);
+        setCards([newCard.data, ...cards]);
         setIsLoading(false);
         closeAllPopups();
       })

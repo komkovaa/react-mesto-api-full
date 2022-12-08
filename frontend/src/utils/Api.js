@@ -88,16 +88,18 @@ class Api {
 
     register = (email, password) => {
         return this._request(`${this._baseUrl}/signup`, {
+            method: 'POST',
             headers: this._headers,
-            data: { email, password }
+            body: JSON.stringify({ email, password }),
         });
     };
 
     //функция проверяет логин и пароль пользователя на сообветствие какому-либо профилю, хранящемуся в базе данных.
     authorize = (email, password) => {
         return this._request(`${this._baseUrl}/signin`, {
+            method: 'POST',
             headers: this._headers,
-            data: { email, password },
+            body: JSON.stringify({ email, password }),
         });
     };
 }
