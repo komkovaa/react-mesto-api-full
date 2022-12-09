@@ -1,5 +1,5 @@
 const apiConfig = {
-    baseUrl: 'https://api.komkova.students.nomoredomains.club/',
+    baseUrl: 'https://api.komkova.students.nomoredomains.club',
     headers:
     {
         'Authorization': '',
