@@ -1,3 +1,6 @@
+require('dotenv').config();
+
+console.log(process.env.NODE_ENV);
 const express = require('express');
 const mongoose = require('mongoose');
 const http2 = require('node:http2');
