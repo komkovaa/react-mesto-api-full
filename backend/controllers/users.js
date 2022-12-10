@@ -6,6 +6,7 @@ const BadRequestError = require('../errors/bad-request-error');
 const NotFoundError = require('../errors/not-found-error');
 const ServerError = require('../errors/server-error');
 const ConflictError = require('../errors/conflict-error');
+const UnauthorizedError = require('../errors/anauthorized-error');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -59,8 +60,8 @@ module.exports.login = (req, res, next) => {
       );
       res.send({ token });
     })
-    .catch((err) => {
-      next(err);
+    .catch(() => {
+      next(new UnauthorizedError('Неверный логин или пароль'));
     });
 };
 
